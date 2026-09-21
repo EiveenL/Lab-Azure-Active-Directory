@@ -63,8 +63,10 @@ El objetivo no fue solo "que funcione", sino dejar documentado el **cómo se com
 
 > **Nota sobre `.local`:** se usó por tratarse de un laboratorio. En producción conviene un subdominio de un dominio propio (`corp.midominio.com`) para evitar conflictos con mDNS/Bonjour y poder emitir certificados públicos.
 
-📷 *Captura: recursos desplegados en el portal de Azure* — (img/01-recursos-azure.png)
-
+📷 *Captura: recursos desplegados en el portal de Azure* 
+<p align="left">
+  <img src="./img/01-recursos-azure.png" alt="Descripción de la imagen" width="1000">
+</p>
 ---
 
 ## Requisitos previos
@@ -149,7 +151,11 @@ az network nsg rule create \
   --access Allow --protocol Tcp --direction Inbound
 ```
 
-📷 *Captura: regla de NSG con origen restringido* — `img/02-nsg-rdp.png`
+📷 *Captura: regla de NSG con origen restringido* 
+<p align="left">
+  <img src="./img/02-nsg-rdp.png" alt="Descripción de la imagen" width="1000">
+</p>
+
 
 ### Validación
 
@@ -171,7 +177,11 @@ Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
 Get-WindowsFeature -Name AD-Domain-Services   # debe figurar como Installed
 ```
 
-📷 *Captura: rol AD DS instalado* — `img/03-instalacion-adds.png`
+📷 *Captura: rol AD DS instalado* 
+<p align="left">
+  <img src="./img/03-instalacion-adds.png" alt="Descripción de la imagen" width="1000">
+</p>
+
 
 ### Promoción a controlador de dominio (bosque nuevo)
 
@@ -194,7 +204,11 @@ Install-ADDSForest `
 
 El servidor se reinicia al terminar. Tras el reinicio, el inicio de sesión ya es `LAB\azureadmin`.
 
-📷 *Captura: promoción completada* — `img/04-promocion-dc.png`
+📷 *Captura: promoción completada* 
+<p align="left">
+  <img src="./img/04-promocion-dc.png" alt="Descripción de la imagen" width="1000">
+</p>
+
 
 ### Validación del controlador de dominio
 
@@ -211,7 +225,11 @@ Resolve-DnsName -Name _ldap._tcp.dc._msdcs.lab.local -Type SRV
 dcdiag /q
 ```
 
-📷 *Captura: contenedores y grupos por defecto en ADUC* — `img/05-aduc-contenedores.png`
+📷 *Captura: contenedores y grupos por defecto en ADUC* 
+<p align="left">
+  <img src="./img/05-aduc-contenedores.png" alt="Descripción de la imagen" width="1000">
+</p>
+
 
 ### Cuenta administrativa de dominio
 
@@ -236,7 +254,11 @@ Get-ADGroupMember -Identity "Domain Admins" | Select-Object Name, SamAccountName
 
 > **Buena práctica:** separar la cuenta de uso diario de la cuenta con privilegios (modelo de niveles / *tiering*). Nombrar la cuenta administrativa como `Administrador` genera confusión con la cuenta integrada del sistema y complica la auditoría: cuando revisás un evento 4624 querés saber de inmediato de qué cuenta se trata.
 
-📷 *Captura: usuario en Domain Admins* — `img/06-usuario-domain-admins.png`
+📷 *Captura: usuario en Domain Admins* 
+<p align="left">
+  <img src="./img/06-usuario-domain-admins.png" alt="Descripción de la imagen" width="1000">
+</p>
+
 
 ---
 
@@ -261,7 +283,11 @@ Unión propiamente dicha:
 Add-Computer -DomainName "lab.local" -Credential (Get-Credential "LAB\adm.israel") -Restart
 ```
 
-📷 *Captura: equipo unido al dominio* — `img/07-union-dominio.png`
+📷 *Captura: equipo unido al dominio* 
+<p align="left">
+  <img src="./img/07-union-dominio.png" alt="Descripción de la imagen" width="1000">
+</p>
+
 
 ### Validación desde CMD
 
@@ -279,7 +305,11 @@ Get-ADComputer -Filter * -Properties OperatingSystem, LastLogonDate |
   Select-Object Name, OperatingSystem, DistinguishedName, LastLogonDate
 ```
 
-📷 *Captura: objeto del equipo en el contenedor Computers de ADUC* — `img/08-aduc-computers.png`
+📷 *Captura: objeto del equipo en el contenedor Computers de ADUC* 
+<p align="left">
+  <img src="./img/08-aduc-computers.png" alt="Descripción de la imagen" width="1000">
+</p>
+
 
 > Los equipos aparecen por defecto en el contenedor `CN=Computers`, que **no** es una OU y no admite GPO vinculadas. Para aplicarles políticas conviene moverlos a una OU propia o redirigir el contenedor por defecto con `redircmp`:
 > ```cmd
@@ -327,7 +357,11 @@ Configuración del equipo
 
 La política se extendió a los perfiles **Privado** y **Público**: un portátil que sale de la oficina cambia de perfil de red, y si solo se endurece el perfil de dominio queda desprotegido justo donde más expuesto está.
 
-📷 *Captura: GPO en Group Policy Management* — `img/09-gpo-firewall.png`
+📷 *Captura: GPO en Group Policy Management* 
+<p align="left">
+  <img src="./img/09-gpo-firewall.png" alt="Descripción de la imagen" width="1000">
+</p>
+
 
 ### Validación en el cliente
 
@@ -346,7 +380,11 @@ netsh advfirewall show allprofiles state
 Set-NetFirewallProfile -Profile Domain -Enabled False   # → acceso denegado / sin efecto
 ```
 
-📷 *Captura: `gpresult /r` mostrando la GPO aplicada* — `img/10-gpresult.png`
+📷 *Captura: `gpresult /r` mostrando la GPO aplicada* 
+<p align="left">
+  <img src="./img/10-gpresult.png" alt="Descripción de la imagen" width="1000">
+</p>
+
 
 > El refresco automático de GPO en clientes ocurre cada 90 minutos (+ desfase aleatorio de hasta 30). En el laboratorio se fuerza con `gpupdate /force`, pero hay que recordar que algunas configuraciones solo se aplican tras reinicio o nuevo inicio de sesión.
 
