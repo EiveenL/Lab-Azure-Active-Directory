@@ -63,7 +63,7 @@ El objetivo no fue solo "que funcione", sino dejar documentado el **cómo se com
 
 > **Nota sobre `.local`:** se usó por tratarse de un laboratorio. En producción conviene un subdominio de un dominio propio (`corp.midominio.com`) para evitar conflictos con mDNS/Bonjour y poder emitir certificados públicos.
 
-📷 *Captura: recursos desplegados en el portal de Azure* — `img/01-recursos-azure.png`
+📷 *Captura: recursos desplegados en el portal de Azure* — (img/01-recursos-azure.png)
 
 ---
 
